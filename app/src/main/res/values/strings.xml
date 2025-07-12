@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">ConstraintLayouts</string>
+    <string name="text_cabeçalho">Página Inicial</string>
+    <string name="text_cabeçalho_posts">Posts</string>
+    <string name="text_cabeçalho_series">Séries</string>
+    <string name="text_cabeçalho_textos">Concurso de Textos</string>
+    <string name="button_blog_post">Blog Post</string>
+    <string name="button_series">Séries</string>
+    <string name="button_textos">Concurso Textos</string>
+    <string name="text_login">
+        Como é bom ter você aqui, \n seja bem-vindo (a)!
+    </string>
+    <string name="text_concurso_textos">
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+    Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+    </string>
+    <string name="text_cadastro_titulo">Crie sua conta</string>
+    <string name="text_ja_tem_conta">Já tem uma conta?</string>
+    <string name="text_fazer_login_aqui">Faça login</string>
+    <string name="cadastrar">Cadastrar</string>
+    <string name="menu">menu</string>
+
+</resources>

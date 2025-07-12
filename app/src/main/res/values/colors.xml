@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+	
+    <!-- Cores da identidade visual abaixo --> 
+
+    <color name="marrom_01">#A14824</color>
+    <color name="marrom_02">#ec8356</color>
+    <color name="amarelo_01">#F1F490</color>
+    <color name="amarelo_02">#FFFFDE</color>
+    <color name="rosa_01">#f48783</color>
+    <color name="bege_01">#feddc6</color>
+    <color name="azul_01">#359ebb</color>
+    <color name="azul_02">#d6faff</color>
+    <color name="verde_01">#70a972</color>
+    <color name="verde_02">#abdd99</color>
+    <color name="vermelho_01">#DD4A0C</color>
+    <color name="roxo_01">#636EA8</color>
+
+</resources>
