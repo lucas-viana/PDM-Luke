@@ -17,5 +17,15 @@
     <color name="verde_02">#abdd99</color>
     <color name="vermelho_01">#DD4A0C</color>
     <color name="roxo_01">#636EA8</color>
-
+    
+    <!-- Cores auxiliares -->
+    <color name="gray">#808080</color>
+    <color name="dark_gray">#404040</color>
+    
+    <!-- Cores de intensidade -->
+    <color name="intensity_low">#4CAF50</color>
+    <color name="intensity_medium_low">#8BC34A</color>
+    <color name="intensity_medium">#FFC107</color>
+    <color name="intensity_medium_high">#FF9800</color>
+    <color name="intensity_high">#F44336</color>
 </resources>

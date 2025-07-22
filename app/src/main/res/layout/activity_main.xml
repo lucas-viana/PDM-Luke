@@ -5,51 +5,118 @@
     android:id="@+id/main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/amarelo_01"
+    android:fontFamily="@font/nunito_03"
     tools:context=".activities.MainActivity">
 
+    <!-- Toolbar -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/black"
+        android:layout_marginTop="12dp"
+        android:background="@color/marrom_01"
+        android:minHeight="?attr/actionBarSize"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/recyclerViewAcoes">
+        app:titleTextColor="@color/amarelo_01" />
 
-        <ImageButton
-            android:id="@+id/menuButton"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:src="@drawable/ic_menu"
-            android:background="@android:color/transparent"
-            android:scaleType="centerInside"
-            android:contentDescription="@string/menu"
-            android:padding="8dp"
-            android:layout_gravity="start|center_vertical"/>
-
-        <TextView
-            android:id="@+id/toolbarTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Luke Ações"
-            android:textColor="@color/vermelho_01"
-            android:textSize="24sp"
-            android:layout_gravity="center"
-            android:paddingStart="16dp"
-            android:paddingBottom="8dp"
-            android:textStyle="bold"/>
-    </androidx.appcompat.widget.Toolbar>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewAcoes"
-        android:layout_width="0dp"
+    <!-- ScrollView para permitir rolagem -->
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:padding="8dp"
-        android:clipToPadding="false"
-        android:background="@color/amarelo_01"
-        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        android:padding="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Card de Boas-vindas -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                android:background="@drawable/inputs_claros"
+                android:padding="20dp">
+
+                <ImageView
+                    android:id="@+id/imageViewLogo"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_marginEnd="16dp"
+                    android:contentDescription="Logo Luke"
+                    android:src="@drawable/luke_feliz"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/textViewBoasVindas"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:fontFamily="@font/nunito_03"
+                    android:text="Olá! Bem-vindo ao seu Diário de Emoções!"
+                    android:textColor="@color/marrom_01"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/imageViewLogo"
+                    app:layout_constraintTop_toTopOf="@+id/imageViewLogo" />
+
+                <TextView
+                    android:id="@+id/textViewDescricao"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:fontFamily="@font/nunito_03"
+                    android:text="Escolha uma atividade para começar seu dia de forma organizada e tranquila."
+                    android:textColor="@color/marrom_01"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/imageViewLogo"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewBoasVindas" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!-- Título das ações -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:fontFamily="@font/nunito_03"
+                android:gravity="center"
+                android:text="🌟 Minhas Atividades do Dia 🌟"
+                android:textColor="@color/marrom_01"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <!-- RecyclerView das ações -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewAcoes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
+                tools:listitem="@layout/activity_item_acao_personagem" />
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- Floating Action Button para ação rápida -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabSentimento"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:contentDescription="Registrar sentimento"
+        android:src="@drawable/ic_sentiment_happy"
+        app:backgroundTint="@color/marrom_01"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:listitem="@layout/activity_item_acao_personagem" />
+        app:tint="@color/amarelo_01" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

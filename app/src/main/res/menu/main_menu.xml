@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    
+    <item
+        android:id="@+id/action_sentimento_diario"
+        android:title="Sentimento do Dia"
+        android:icon="@drawable/ic_sentiment_happy"
+        app:showAsAction="ifRoom" />
+    
+    <item
+        android:id="@+id/action_galeria"
+        android:title="Galeria"
+        android:icon="@drawable/ic_gallery"
+        app:showAsAction="ifRoom" />
+    
+    <item
+        android:id="@+id/action_share"
+        android:title="Compartilhar"
+        android:icon="@drawable/ic_share"
+        app:showAsAction="never" />
+    
+    <item
+        android:id="@+id/action_settings"
+        android:title="Configurações"
+        android:icon="@drawable/ic_settings"
+        app:showAsAction="never" />
+    
+    <item
+        android:id="@+id/action_metas"
+        android:title="Metas"
+        android:icon="@drawable/ic_star"
+        app:showAsAction="ifRoom" />
+    
+    <item
+        android:id="@+id/action_dica_do_dia"
+        android:title="Dica do Dia"
+        android:icon="@drawable/ic_lightbulb"
+        app:showAsAction="never" />
+    
+    <item
+        android:id="@+id/action_posts"
+        android:title="Posts"
+        android:icon="@drawable/ic_post"
+        app:showAsAction="never" />
+    
+    <item
+        android:id="@+id/action_about"
+        android:title="Sobre"
+        android:icon="@drawable/ic_info"
+        app:showAsAction="never" />
+    
+    <item
+        android:id="@+id/action_logout"
+        android:title="Sair"
+        android:icon="@drawable/ic_logout"
+        app:showAsAction="never" />
+</menu>

@@ -2,6 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- Permissões para notificações -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -12,6 +16,26 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.LukeDiario"
         tools:targetApi="31">
+        <activity
+            android:name=".activities.ConfiguracoesActivity"
+            android:exported="false"
+            android:theme="@style/Theme.LukeDiario" />
+        <activity
+            android:name=".activities.DicaDoDiaActivity"
+            android:exported="false"
+            android:theme="@style/Theme.LukeDiario" />
+        <activity
+            android:name=".activities.PostsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.LukeDiario" />
+        <activity
+            android:name=".activities.CadastroActivity"
+            android:exported="false"
+            android:theme="@style/Theme.LukeDiario" />
+        <activity
+            android:name=".activities.MetasActivity"
+            android:exported="false"
+            android:theme="@style/Theme.LukeDiario" />
         <activity
             android:name=".SentimentoDoDiaActivity"
             android:exported="false" />
@@ -45,6 +69,12 @@
             android:name=".activities.SentimentoDiarioActivity"
             android:exported="false"
             android:theme="@style/Theme.LukeDiario" />
+
+        <!-- Receiver para notificações -->
+        <receiver
+            android:name=".utils.NotificationReceiver"
+            android:exported="false" />
+
     </application>
 
 </manifest>

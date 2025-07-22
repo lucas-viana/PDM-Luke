@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ConstraintLayouts</string>
+    <string name="app_name">Luke Diário de Emoções</string>
     <string name="text_cabeçalho">Página Inicial</string>
     <string name="text_cabeçalho_posts">Posts</string>
     <string name="text_cabeçalho_series">Séries</string>
@@ -20,6 +20,10 @@
     <string name="text_ja_tem_conta">Já tem uma conta?</string>
     <string name="text_fazer_login_aqui">Faça login</string>
     <string name="cadastrar">Cadastrar</string>
-    <string name="menu">menu</string>
-
+    <string name="menu">Menu</string>
+    <string name="share_app">Compartilhar App</string>
+    <string name="settings">Configurações</string>
+    <string name="about">Sobre</string>
+    <string name="emotion_diary">Diário de Emoções</string>
+    <string name="actions_gallery">Galeria de Ações</string>
 </resources>

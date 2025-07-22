@@ -1,5 +1,168 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent">
-</androidx.constraintlayout.widget.ConstraintLayout>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar_sentimento"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/vermelho_01"
+            app:titleTextColor="@color/white" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Formulário de Emoção -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Como você está se sentindo hoje?"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:layout_marginBottom="16dp" />
+
+                    <RadioGroup
+                        android:id="@+id/radioGroupEmocoes"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp">
+
+                        <RadioButton
+                            android:id="@+id/radioFeliz"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="😊 Feliz"
+                            android:textSize="16sp"
+                            android:padding="8dp" />
+
+                        <RadioButton
+                            android:id="@+id/radioTriste"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="😢 Triste"
+                            android:textSize="16sp"
+                            android:padding="8dp" />
+
+                        <RadioButton
+                            android:id="@+id/radioRaiva"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="😠 Raiva"
+                            android:textSize="16sp"
+                            android:padding="8dp" />
+
+                        <RadioButton
+                            android:id="@+id/radioMedo"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="😨 Medo"
+                            android:textSize="16sp"
+                            android:padding="8dp" />
+
+                        <RadioButton
+                            android:id="@+id/radioCalmo"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="😌 Calmo"
+                            android:textSize="16sp"
+                            android:padding="8dp" />
+
+                    </RadioGroup>
+
+                    <TextView
+                        android:id="@+id/textViewIntensidade"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Intensidade: 1/5"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="8dp" />
+
+                    <SeekBar
+                        android:id="@+id/seekBarIntensidade"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:max="4"
+                        android:progress="0"
+                        android:layout_marginBottom="16dp" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Descreva o que aconteceu..."
+                        android:layout_marginBottom="16dp"
+                        app:boxStrokeColor="@color/vermelho_01">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/editTextDescricao"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:maxLines="4"
+                            android:inputType="textMultiLine" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <Button
+                        android:id="@+id/buttonSalvar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Salvar Emoção"
+                        android:textColor="@color/white"
+                        android:backgroundTint="@color/vermelho_01"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Lista de Emoções Salvas -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Histórico de Emoções"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:layout_marginBottom="16dp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewEmocoes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false" />
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
