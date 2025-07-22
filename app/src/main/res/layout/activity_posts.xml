@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- AppBar -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/vermelho_01"
+            app:titleTextColor="@color/white"
+            app:title="📝 Posts do GitHub" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <!-- Conteúdo Principal -->
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Cabeçalho -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="📄 Posts"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@color/marrom_01"
+                android:gravity="center"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Status do carregamento -->
+            <TextView
+                android:id="@+id/textViewStatus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="🔄 Carregando posts do GitHub..."
+                android:textSize="14sp"
+                android:textColor="@color/marrom_01"
+                android:gravity="center"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Progress Bar -->
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="16dp" />
+
+            <!-- RecyclerView para os posts -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewPosts"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false" />
+
+            <!-- Botão para recarregar -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/buttonRecarregar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="🔄 Recarregar Posts"
+                android:textColor="@color/white"
+                android:backgroundTint="@color/marrom_01"
+                android:layout_marginTop="16dp" />
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
