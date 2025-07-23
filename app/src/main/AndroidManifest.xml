@@ -72,7 +72,7 @@
 
         <!-- Receiver para notificações -->
         <receiver
-            android:name=".utils.NotificationReceiver"
+            android:name=".utils.NotificationManager$NotificationReceiver"
             android:exported="false" />
 
     </application>

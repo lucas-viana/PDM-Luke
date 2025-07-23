@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private TextView textViewBoasVindas;
     private NotificationManager notificationManager;
+    private AcaoPersonagemAdapter adapter; // Referência para limpar o TTS
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +69,13 @@ public class MainActivity extends AppCompatActivity {
                 "🌟 Bem-vindo! Vamos organizar seu dia juntos! 🌟", 
                 Snackbar.LENGTH_LONG).show();
             preferencesManager.setFirstTime(false);
+            
+            // Mostrar dica sobre o leitor de texto após um pequeno delay
+            findViewById(R.id.main_layout).postDelayed(() -> {
+                Snackbar.make(findViewById(R.id.main_layout), 
+                    "💡 Dica: Pressione e segure uma ação para ouvi-la! 🔊", 
+                    Snackbar.LENGTH_LONG).show();
+            }, 3000); // 3 segundos de delay
         }
     }
     
@@ -159,7 +167,7 @@ public class MainActivity extends AppCompatActivity {
                 "Anotar como me sinto hoje", "Principal", true)
         );
 
-        AcaoPersonagemAdapter adapter = new AcaoPersonagemAdapter(lista, this);
+        adapter = new AcaoPersonagemAdapter(lista, this);
         recyclerView.setAdapter(adapter);
     }
     
@@ -223,6 +231,18 @@ public class MainActivity extends AppCompatActivity {
             "Experimente você também! 😊");
         startActivity(Intent.createChooser(shareIntent, "Compartilhar Luke Diário"));
     }
+
+    private void shareProgress() {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Progresso no Luke Diário");
+        shareIntent.putExtra(Intent.EXTRA_TEXT, 
+            "🎉 Acabei de completar uma atividade no Luke Diário! 🎉\n\n" +
+            "Estou organizando minha rotina e cuidando do meu bem-estar emocional. " +
+            "Cada pequeno passo é uma grande conquista! 💪\n\n" +
+            "#EducacaoAssistiva #Autismo #OrganizacaoRotina #LukeDiario");
+        startActivity(Intent.createChooser(shareIntent, "Compartilhar Progresso"));
+    }
     
     private void logout() {
         firebaseAuth.signOut();
@@ -261,5 +281,14 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this, "Permissão negada. Lembretes não serão exibidos.", Toast.LENGTH_LONG).show();
             }
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        // Limpar recursos do TextToSpeech
+        if (adapter != null) {
+            adapter.cleanup();
+        }
+        super.onDestroy();
     }
 }

@@ -2,9 +2,8 @@ package br.edu.ifsuldeminas.mch.constraintlayouts.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.view.ContextMenu;
+import android.speech.tts.TextToSpeech;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -17,6 +16,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import br.edu.ifsuldeminas.mch.constraintlayouts.R;
@@ -29,11 +29,30 @@ public class AcaoPersonagemAdapter extends RecyclerView.Adapter<AcaoPersonagemAd
     private final List<AcaoPersonagem> lista;
     private final Context context;
     private final PreferencesManager preferencesManager;
+    private TextToSpeech textToSpeech;
+    private boolean ttsInitialized = false;
 
     public AcaoPersonagemAdapter(List<AcaoPersonagem> lista, Context context) {
         this.lista = lista;
         this.context = context;
         this.preferencesManager = new PreferencesManager(context);
+        
+        // Inicializar Text-to-Speech
+        textToSpeech = new TextToSpeech(context, new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if (status == TextToSpeech.SUCCESS) {
+                    int result = textToSpeech.setLanguage(new Locale("pt", "BR"));
+                    if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                        // Fallback para português de Portugal se brasileiro não estiver disponível
+                        textToSpeech.setLanguage(new Locale("pt", "PT"));
+                    }
+                    textToSpeech.setSpeechRate(0.8f); // Velocidade um pouco mais lenta para melhor compreensão
+                    textToSpeech.setPitch(1.0f);
+                    ttsInitialized = true;
+                }
+            }
+        });
     }
 
     @NonNull
@@ -77,19 +96,31 @@ public class AcaoPersonagemAdapter extends RecyclerView.Adapter<AcaoPersonagemAd
                 Toast.makeText(context, "Ação registrada. E-mail do responsável não configurado para notificação.", Toast.LENGTH_LONG).show();
             }
         });
-        
-        // Registra menu de contexto
-        holder.itemView.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
-            @Override
-            public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-                menu.setHeaderTitle("Opções para " + acao.getTitulo());
-                menu.add(0, 1, 0, "✅ Marcar como Concluída");
-                menu.add(0, 2, 0, "📝 Adicionar Nota");
-                menu.add(0, 3, 0, "⭐ Marcar como Favorita");
-                menu.add(0, 4, 0, "📅 Agendar Lembrete");
-                menu.add(0, 5, 0, "📤 Compartilhar Progresso");
-            }
+
+        // Long press para reproduzir o áudio da ação
+        holder.itemView.setOnLongClickListener(v -> {
+            AcaoPersonagem acaoSelecionada = lista.get(position);
+            speakText(acaoSelecionada);
+            return true; // Consome o evento
         });
+    }
+
+    private void speakText(AcaoPersonagem acao) {
+        if (ttsInitialized && textToSpeech != null) {
+            // Primeiro parar qualquer fala em andamento
+            textToSpeech.stop();
+            
+            // Preparar o texto para ser falado
+            String textoParaFalar = acao.getTitulo() + ". " + acao.getDescricao();
+            
+            // Mostrar feedback visual
+            Toast.makeText(context, "🔊 Reproduzindo: " + acao.getTitulo(), Toast.LENGTH_SHORT).show();
+            
+            // Falar o texto
+            textToSpeech.speak(textoParaFalar, TextToSpeech.QUEUE_FLUSH, null, "acao_" + acao.getTitulo());
+        } else {
+            Toast.makeText(context, "Leitor de texto não está disponível", Toast.LENGTH_SHORT).show();
+        }
     }
     
     private void executeAction(AcaoPersonagem acao) {
@@ -149,7 +180,15 @@ public class AcaoPersonagemAdapter extends RecyclerView.Adapter<AcaoPersonagemAd
         return lista.size();
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
+    // Método para limpar recursos do TextToSpeech
+    public void cleanup() {
+        if (textToSpeech != null) {
+            textToSpeech.stop();
+            textToSpeech.shutdown();
+        }
+    }
+
+    static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
         TextView textViewTitulo;
         TextView textViewDescricao;
@@ -163,12 +202,6 @@ public class AcaoPersonagemAdapter extends RecyclerView.Adapter<AcaoPersonagemAd
             textViewDescricao = itemView.findViewById(R.id.textViewDescricao);
             textViewCategoria = itemView.findViewById(R.id.textViewCategoria);
             iconImportancia = itemView.findViewById(R.id.imageViewIndicadorImportante);
-            itemView.setOnCreateContextMenuListener(this);
-        }
-
-        @Override
-        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-            // Implementado no onBindViewHolder
         }
     }
 }
