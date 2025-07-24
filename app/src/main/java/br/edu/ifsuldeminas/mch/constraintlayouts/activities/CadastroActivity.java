@@ -1,6 +1,9 @@
 package br.edu.ifsuldeminas.mch.constraintlayouts.activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
@@ -57,10 +60,7 @@ public class CadastroActivity extends AppCompatActivity {
         editTextEmailResponsavel = findViewById(R.id.editTextEmailResponsavel);
         buttonCadastrar = findViewById(R.id.buttonCadastrar);
         textViewJaTenhoConta = findViewById(R.id.textViewJaTenhoConta);
-        
-        // Criar ProgressBar programaticamente se não existir no layout
-        progressBar = new ProgressBar(this);
-        progressBar.setVisibility(View.GONE);
+        progressBar = findViewById(R.id.progressBar);
 
         // Limpar erros ao focar nos campos
         editTextNome.setOnFocusChangeListener((v, hasFocus) -> {
@@ -119,18 +119,31 @@ public class CadastroActivity extends AppCompatActivity {
             return;
         }
 
+        // Verificar conectividade apenas para debug - não bloquear o cadastro
+        boolean networkAvailable = isNetworkAvailable();
+        System.out.println("=== VERIFICAÇÃO DE REDE (Debug) ===");
+        System.out.println("Rede disponível: " + networkAvailable);
+        System.out.println("NOTA: Prosseguindo com cadastro independente da verificação local");
+        System.out.println("===================================");
+
         // Mostrar carregamento
         mostrarCarregamento(true);
 
+        // Tentar cadastrar - deixar o Firebase lidar com erros de conectividade
+        tentarCadastro(email, senha, nome, emailResponsavel, 1);
+    }
+
+    private void tentarCadastro(String email, String senha, String nome, String emailResponsavel, int tentativa) {
+        System.out.println("=== TENTATIVA " + tentativa + " ===");
+        
         // Criar usuário no Firebase
         firebaseAuth.createUserWithEmailAndPassword(email, senha)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        mostrarCarregamento(false);
-
                         if (task.isSuccessful()) {
                             // Cadastro bem-sucedido
+                            mostrarCarregamento(false);
                             FirebaseUser user = firebaseAuth.getCurrentUser();
                             if (user != null) {
                                 // Salvar dados do usuário
@@ -138,7 +151,7 @@ public class CadastroActivity extends AppCompatActivity {
                                 preferencesManager.salvarUsuario(user.getUid(), email, emailResponsavel);
 
                                 Toast.makeText(CadastroActivity.this,
-                                        "Cadastro realizado com sucesso! Bem-vindo ao Luke Diário, " + nome + "!",
+                                        "✅ Cadastro realizado com sucesso! Bem-vindo ao Luke Diário, " + nome + "! 🎉",
                                         Toast.LENGTH_LONG).show();
 
                                 // Redirecionar para MainActivity
@@ -147,26 +160,77 @@ public class CadastroActivity extends AppCompatActivity {
                                 finish();
                             }
                         } else {
-                            // Falha no cadastro
-                            String errorMessage = "Erro no cadastro. Tente novamente.";
-                            if (task.getException() != null) {
-                                String error = task.getException().getMessage();
-                                if (error != null) {
-                                    if (error.contains("email") && error.contains("use")) {
-                                        errorMessage = "Este e-mail já está sendo usado por outra conta.";
-                                    } else if (error.contains("weak-password")) {
-                                        errorMessage = "A senha é muito fraca. Use pelo menos 6 caracteres.";
-                                    } else if (error.contains("invalid-email")) {
-                                        errorMessage = "O formato do e-mail é inválido.";
-                                    } else if (error.contains("network")) {
-                                        errorMessage = "Erro de conexão. Verifique sua internet.";
-                                    }
+                            // Falha no cadastro - verificar se deve tentar novamente
+                            Exception exception = task.getException();
+                            boolean shouldRetry = false;
+                            
+                            if (exception != null) {
+                                String error = exception.getMessage();
+                                if (error != null && (error.contains("network") || error.contains("timeout") || 
+                                                    error.contains("interrupted connection") || 
+                                                    error.contains("unreachable host") ||
+                                                    error.contains("reCAPTCHA"))) {
+                                    shouldRetry = true;
                                 }
                             }
-                            Toast.makeText(CadastroActivity.this, errorMessage, Toast.LENGTH_LONG).show();
+                            
+                            if (shouldRetry && tentativa < 3) {
+                                // Tentar novamente após delay
+                                System.out.println("Tentando novamente em 2 segundos...");
+                                buttonCadastrar.setText("Tentando novamente... (" + (tentativa + 1) + "/3)");
+                                
+                                buttonCadastrar.postDelayed(() -> {
+                                    tentarCadastro(email, senha, nome, emailResponsavel, tentativa + 1);
+                                }, 2000);
+                            } else {
+                                // Falha definitiva ou erro não relacionado à rede
+                                mostrarCarregamento(false);
+                                processarErroCadastro(exception);
+                            }
                         }
                     }
                 });
+    }
+
+    private void processarErroCadastro(Exception exception) {
+        String errorMessage = "Erro no cadastro. Tente novamente.";
+        
+        if (exception != null) {
+            String error = exception.getMessage();
+            System.out.println("=== ERRO FIREBASE ===");
+            System.out.println("Erro completo: " + error);
+            System.out.println("Tipo de exceção: " + exception.getClass().getSimpleName());
+            System.out.println("====================");
+            
+            if (error != null) {
+                if (error.contains("email") && error.contains("use")) {
+                    errorMessage = "❌ Este e-mail já está sendo usado por outra conta.";
+                } else if (error.contains("weak-password")) {
+                    errorMessage = "❌ A senha é muito fraca. Use pelo menos 6 caracteres.";
+                } else if (error.contains("invalid-email")) {
+                    errorMessage = "❌ O formato do e-mail é inválido.";
+                } else if (error.contains("network") || error.contains("timeout") || 
+                         error.contains("interrupted connection") || 
+                         error.contains("unreachable host") ||
+                         error.contains("reCAPTCHA")) {
+                    errorMessage = "⚠️ Problema de conexão persistente.\n\n" +
+                                 "• Verifique sua conexão com a internet\n" +
+                                 "• Tente conectar via WiFi se estiver usando dados móveis\n" +
+                                 "• Aguarde alguns minutos e tente novamente\n" +
+                                 "• Se o problema persistir, tente mais tarde";
+                    
+                    // Habilitar botão de tentar novamente após 3 segundos
+                    buttonCadastrar.postDelayed(() -> {
+                        buttonCadastrar.setText("🔄 Tentar Novamente");
+                        buttonCadastrar.setEnabled(true);
+                    }, 3000);
+                } else if (error.contains("too-many-requests")) {
+                    errorMessage = "⏳ Muitas tentativas. Aguarde alguns minutos antes de tentar novamente.";
+                }
+            }
+        }
+        
+        Toast.makeText(CadastroActivity.this, errorMessage, Toast.LENGTH_LONG).show();
     }
 
     private boolean validarCampos(String nome, String email, String senha, String confirmarSenha, String emailResponsavel) {
@@ -239,6 +303,34 @@ public class CadastroActivity extends AppCompatActivity {
             progressBar.setVisibility(View.GONE);
             buttonCadastrar.setEnabled(true);
             buttonCadastrar.setText("Cadastrar");
+        }
+    }
+
+    private boolean isNetworkAvailable() {
+        try {
+            ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+            if (connectivityManager != null) {
+                NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+                boolean isConnected = activeNetworkInfo != null && activeNetworkInfo.isConnected();
+                
+                System.out.println("=== DEBUG CONECTIVIDADE ===");
+                System.out.println("ConnectivityManager: " + (connectivityManager != null ? "OK" : "NULL"));
+                System.out.println("ActiveNetworkInfo: " + (activeNetworkInfo != null ? "OK" : "NULL"));
+                if (activeNetworkInfo != null) {
+                    System.out.println("Tipo de rede: " + activeNetworkInfo.getTypeName());
+                    System.out.println("Estado: " + activeNetworkInfo.getState());
+                    System.out.println("Conectado: " + activeNetworkInfo.isConnected());
+                }
+                System.out.println("Resultado final: " + isConnected);
+                System.out.println("===========================");
+                
+                return isConnected;
+            }
+            System.out.println("ConnectivityManager é null - assumindo conectado");
+            return true; // Se não conseguir verificar, assume que está conectado
+        } catch (Exception e) {
+            System.out.println("Erro ao verificar conectividade: " + e.getMessage());
+            return true; // Em caso de erro, assume que está conectado
         }
     }
 }
