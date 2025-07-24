@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private TextView textViewBoasVindas;
     private NotificationManager notificationManager;
-    private AcaoPersonagemAdapter adapter; // Referência para limpar o TTS
+    private AcaoPersonagemAdapter adapter;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {

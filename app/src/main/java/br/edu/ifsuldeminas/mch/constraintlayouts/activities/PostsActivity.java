@@ -49,8 +49,7 @@ public class PostsActivity extends AppCompatActivity {
         configurarRetrofit();
         configurarRecyclerView();
         configurarEventos();
-        
-        // Carregar posts automaticamente
+
         carregarPosts();
     }
     

@@ -6,9 +6,6 @@ import retrofit2.Call;
 import retrofit2.http.GET;
 
 public interface PostApiService {
-    // 🔗 CONFIGURADO: Consumindo o arquivo do GitHub do lucas-viana
-    // URL: https://raw.githubusercontent.com/lucas-viana/luke-posts/refs/heads/main/posts.json
-    
     @GET("lucas-viana/luke-posts/refs/heads/main/posts.json")
     Call<List<Post>> obterPosts();
 }

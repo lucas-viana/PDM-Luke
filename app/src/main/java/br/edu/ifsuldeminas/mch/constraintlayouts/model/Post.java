@@ -5,10 +5,8 @@ public class Post {
     private String title;
     private String body;
 
-    // Construtor vazio (necessário para Gson)
     public Post() {}
 
-    // Construtor completo
     public Post(int id, String title, String body) {
         this.id = id;
         this.title = title;

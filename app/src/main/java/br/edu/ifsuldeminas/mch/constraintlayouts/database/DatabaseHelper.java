@@ -16,7 +16,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_DESCRICAO = "descricao";
     public static final String COLUMN_NIVEL_INTENSIDADE = "nivel_intensidade";
 
-    // Script de criação da tabela
     private static final String CREATE_TABLE_EMOCOES = 
         "CREATE TABLE " + TABLE_EMOCOES + " (" +
         COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +

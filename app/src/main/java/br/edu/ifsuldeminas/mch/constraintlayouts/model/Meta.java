@@ -12,7 +12,6 @@ public class Meta {
     private Date dataCriacao;
 
     public Meta() {
-        // Construtor vazio necessário para o Firestore
     }
 
     public Meta(String titulo, String descricao) {

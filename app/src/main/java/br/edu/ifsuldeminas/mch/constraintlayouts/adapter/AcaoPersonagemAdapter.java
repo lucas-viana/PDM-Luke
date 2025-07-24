@@ -9,10 +9,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -21,7 +24,6 @@ import java.util.Map;
 
 import br.edu.ifsuldeminas.mch.constraintlayouts.R;
 import br.edu.ifsuldeminas.mch.constraintlayouts.activities.SentimentoDiarioActivity;
-import br.edu.ifsuldeminas.mch.constraintlayouts.activities.GaleriaAcoesActivity;
 import br.edu.ifsuldeminas.mch.constraintlayouts.modelLayout.AcaoPersonagem;
 import br.edu.ifsuldeminas.mch.constraintlayouts.utils.PreferencesManager;
 
@@ -70,27 +72,24 @@ public class AcaoPersonagemAdapter extends RecyclerView.Adapter<AcaoPersonagemAd
         holder.textViewTitulo.setText(acao.getTitulo());
         holder.textViewDescricao.setText(acao.getDescricao());
         holder.textViewCategoria.setText(acao.getCategoria());
-        
-        // Aplicar estilo visual para ações importantes
+
+
         if (acao.isImportante()) {
             holder.iconImportancia.setVisibility(View.VISIBLE);
             holder.iconImportancia.setImageResource(R.drawable.ic_star_important);
         } else {
             holder.iconImportancia.setVisibility(View.GONE);
         }
-        
-        // Configurar cores da categoria
+
         int corCategoria = getCategoriaColor(acao.getCategoria());
         holder.textViewCategoria.setTextColor(ContextCompat.getColor(context, corCategoria));
-        
-        // Clique no item inteiro
+
         holder.itemView.setOnClickListener(v -> {
             AcaoPersonagem acaoClicada = lista.get(position);
             String responsibleEmail = preferencesManager.getResponsibleEmail();
             String userName = preferencesManager.getUserName();
 
             if (responsibleEmail != null && !responsibleEmail.isEmpty()) {
-                // Salvar a ação no Firestore para acionar a Cloud Function
                 salvarAcaoParaNotificar(acaoClicada, responsibleEmail, userName);
             } else {
                 Toast.makeText(context, "Ação registrada. E-mail do responsável não configurado para notificação.", Toast.LENGTH_LONG).show();
@@ -157,8 +156,7 @@ public class AcaoPersonagemAdapter extends RecyclerView.Adapter<AcaoPersonagemAd
 
     private void salvarAcaoParaNotificar(AcaoPersonagem acao, String emailResponsavel, String nomeUsuario) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        
-        // Usando um Map para mais flexibilidade com a Cloud Function
+
         Map<String, Object> registro = new HashMap<>();
         registro.put("tituloAcao", acao.getTitulo());
         registro.put("descricaoAcao", acao.getDescricao());
